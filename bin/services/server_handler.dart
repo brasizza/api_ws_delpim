@@ -14,15 +14,15 @@ class ServeHandler {
       var result = await req.readAsString();
       Map json = jsonDecode(result);
       var jsonMessage = jsonEncode(json);
-      var idSend = json["idSend"] ?? "";
+      var slug = json["slug"] ?? "";
 
-      if (idSend != "" && ControllerWs.connections.isNotEmpty) {
-        bool contains = controller.containsId(idSend);
+      if (slug != "" && ControllerWs.connections.isNotEmpty) {
+        bool contains = controller.containsId(slug);
         if (contains != false) {
-          controller.sendSolicitacao(ControllerWs.connections, jsonMessage.toString(), idSend);
+          controller.sendSolicitacao(ControllerWs.connections, jsonMessage.toString(), slug);
           return Response.ok("Sucesso solicitação ennviada");
         } else {
-          return Response.forbidden("Error O id: $idSend Não Está conectado ao Websocket");
+          return Response.forbidden("Error O slug: $slug Não Está conectado ao Websocket");
         }
       } else {
         return Response.forbidden("Error (idSend não enviado)");

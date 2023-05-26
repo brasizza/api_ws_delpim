@@ -4,19 +4,19 @@ import 'dart:io';
 class ControllerWs {
   static List<ClientWS> connections = [];
 
-  void addOrUpdateClient({required String idSave, required WebSocket webSocket}) {
+  void addOrUpdateClient({required String slug, required WebSocket webSocket}) {
     // Verifica se o idSave é válido
-    if (idSave != "") {
+    if (slug != "") {
       // Procura pelo cliente com o id desejado
-      int index = _getClientIndexById(idSave);
+      int index = _getClientIndexById(slug);
       // Se o cliente existe, atualiza os dados
       if (index != -1) {
-        var updatedClient = ClientWS(id: idSave, webSocket: webSocket);
+        var updatedClient = ClientWS(slug: slug, webSocket: webSocket);
         connections[index] = updatedClient;
       }
       // Se o cliente não existe, adiciona um novo cliente
       else {
-        var newClient = ClientWS(id: idSave, webSocket: webSocket);
+        var newClient = ClientWS(slug: slug, webSocket: webSocket);
         connections.add(newClient);
       }
     }
@@ -24,7 +24,7 @@ class ControllerWs {
 
   int _getClientIndexById(String id) {
     for (int i = 0; i < connections.length; i++) {
-      if (connections[i].id == id) {
+      if (connections[i].slug == id) {
         return i;
       }
     }
@@ -32,22 +32,22 @@ class ControllerWs {
   }
 
   bool containsId(String id) {
-    bool idExist = connections.any((i) => i.id == id);
+    bool idExist = connections.any((i) => i.slug == id);
     return idExist;
   }
 
   Future<void> sendSolicitacao(
     List<ClientWS> connections,
     String data,
-    String idSend,
+    String slug,
   ) async {
-    final client = connections.firstWhere((cliente) => cliente.id == idSend);
+    final client = connections.firstWhere((cliente) => cliente.slug == slug);
     var conectado = client.webSocket.closeCode;
     if (conectado == null) {
       client.webSocket.add(data);
     } else {
       Timer timer = Timer.periodic(Duration(seconds: 3), (timer) {
-        final clientReconnect = connections.firstWhere((cliente) => cliente.id == idSend);
+        final clientReconnect = connections.firstWhere((cliente) => cliente.slug == slug);
         if (clientReconnect.webSocket.closeCode == null) {
           clientReconnect.webSocket.add(data);
           print("data: $data");
@@ -62,14 +62,14 @@ class ControllerWs {
 }
 
 class ClientWS {
-  final String id;
+  final String slug;
   final WebSocket webSocket;
 
   ClientWS({
-    required this.id,
+    required this.slug,
     required this.webSocket,
   });
 
   @override
-  String toString() => 'ClientWS(id: $id, webSocket: $webSocket)';
+  String toString() => 'ClientWS(slug: $slug, webSocket: $webSocket)';
 }
