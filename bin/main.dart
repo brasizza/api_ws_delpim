@@ -28,8 +28,8 @@ void main() async {
 
       webSocket.listen((data) async {
         var json = await jsonDecode(data);
-        var idSave = json["idSave"];
-        controllerWs.addOrUpdateClient(slug: idSave, webSocket: webSocket);
+        var slug = json["slug"];
+        controllerWs.addOrUpdateClient(slug: slug, webSocket: webSocket);
         print("Conexões atualizadas: ${ControllerWs.connections}");
       });
     } else {
