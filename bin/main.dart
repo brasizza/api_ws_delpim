@@ -2,7 +2,6 @@
 // https://github.com/Delpim-Automacao/api_ws_delpim
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
-import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 import 'dart:convert';
 import 'dart:io' as io;
 import 'services/server_handler.dart';
@@ -10,10 +9,6 @@ import 'services/controller_ws.dart';
 import 'package:dotenv/dotenv.dart';
 
 void main() async {
-  final overrideHeaders = {
-    ACCESS_CONTROL_ALLOW_ORIGIN: '*',
-    'Content-Type': 'application/json;charset=utf-8'
-  };
   var env = DotEnv(includePlatformEnvironment: true)..load();
   String _ip = env["IP"].toString();
   int _portHttp = int.parse(env["PORTHTTP"] ?? "0");

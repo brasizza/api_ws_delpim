@@ -11,7 +11,6 @@ dependencies:
   dotenv: ^4.1.0
   envied: ^0.3.0
   path: ^1.8.0
-  shelf_cors_headers: ^0.1.5
   web_socket_channel: ^2.3.0
 
 dev_dependencies:
